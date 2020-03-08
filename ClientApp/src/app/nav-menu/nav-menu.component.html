@@ -1,0 +1,57 @@
+<header>
+  <nav
+    class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3"
+  >
+    <div class="container">
+      <a class="navbar-brand" [routerLink]="['/']"><h1>𝖒𝖆𝖎𝖓𝖘𝖙𝖗𝖊𝖆𝖒</h1></a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target=".navbar-collapse"
+        aria-label="Toggle navigation"
+        [attr.aria-expanded]="isExpanded"
+        (click)="toggle()"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div
+        class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse"
+        [ngClass]="{ show: isExpanded }"
+      >
+        <ul class="navbar-nav flex-grow">
+          <li *ngIf="currentUser" class="nav-item" [routerLinkActive]="['link-active']">
+            <button class="nav-link btn btn-primary" [routerLink]="['/start']"
+              >Start a stream</button
+            >
+          </li>
+          <li
+            class="nav-item"
+            [routerLinkActive]="['link-active']"
+            [routerLinkActiveOptions]="{ exact: true }"
+          >
+            <a class="nav-link text-dark" [routerLink]="['/']">Home</a>
+          </li>
+          <li class="nav-item" [routerLinkActive]="['link-active']">
+            <a class="nav-link text-dark" [routerLink]="['/player']"
+              >Watch</a
+            >
+          </li>
+          <li *ngIf="!currentUser" class="nav-item" [routerLinkActive]="['link-active']">
+            <a class="nav-link text-dark" [routerLink]="['/login']"
+              >Sign In</a
+            >
+          </li>
+          <li *ngIf="!currentUser" class="nav-item" [routerLinkActive]="['link-active']">
+            <button class="nav-link btn btn-primary" [routerLink]="['/signup']"
+              >Sign Up</button
+            >
+          </li>
+          <li *ngIf="currentUser" class="nav-item" [routerLinkActive]="['link-active']">
+            <app-current-user [user]="currentUser"></app-current-user>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>

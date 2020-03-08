@@ -1,0 +1,14 @@
+div {
+    position: relative;
+}
+
+span {
+    display: block;
+    font-weight: bold;
+}
+
+.status {
+    position: absolute;
+    font-size: 1ex;
+    bottom: -1.5ex;
+}

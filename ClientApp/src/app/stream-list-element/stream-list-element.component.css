@@ -1,0 +1,14 @@
+.stream-list-element {
+    width: 320px;
+}
+
+.thumbnail {
+    height: 180px;
+    background-color: black;
+}
+
+.title {
+    overflow: hidden;
+    background-color: #222;
+    color: white;
+}

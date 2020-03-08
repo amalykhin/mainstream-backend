@@ -1,0 +1,16 @@
+<form [formGroup]="startStreamForm" (submit)="onSubmit(startStreamForm.value)">
+    <div class="form-group">
+        <label for="title">Stream title</label>
+        <input type="text" id="title" formControlName="title" class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="description">Stream description</label>
+        <input type="text" id="description" formControlName="description" class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="streamKey">Stream key</label>
+        <label type="text" id="streamerKey" class="form-control" disabled>{{ currentUser.streamerKey }}</label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create stream</button>
+</form>

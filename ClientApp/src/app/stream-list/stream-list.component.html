@@ -1,0 +1,7 @@
+<div class=".container">
+    <div class="no-streams-msg" *ngIf="streams?.length == 0">
+        <h2>Nobody is streaming yet...</h2>
+        <h3>Be first!</h3>
+    </div>
+    <app-stream-list-element *ngFor="let stream of streams" [stream]="stream"></app-stream-list-element>
+</div>
