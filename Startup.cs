@@ -34,6 +34,10 @@ namespace SteamingService
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie();
+            services.AddCors(c => c.AddPolicy("AllowOrigin", opt => { 
+                opt.AllowAnyOrigin();
+                opt.AllowAnyHeader();
+                }));
 
             services.AddDbContext<DataContext>(options => options.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=mainstreamDb;Trusted_Connection=True;"));
 
@@ -68,6 +72,8 @@ namespace SteamingService
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseCors("AllowOrigin");
 
             app.UseEndpoints(endpoints =>
             {
