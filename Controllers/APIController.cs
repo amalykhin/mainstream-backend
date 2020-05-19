@@ -150,5 +150,24 @@ namespace SteamingService.Controllers
                 return BadRequest(new { message = e.Message });
             }
         }
+
+        [HttpGet("streams/{broadcasterName}")]
+        public IActionResult GetStream(string broadcasterName)
+        {
+            try
+            {
+                var stream = _streamService.GetStreams()
+                    .FirstOrDefault(s => s.Broadcaster.Username == broadcasterName);
+
+                return Ok(stream);
+            }
+            catch (Exception e)
+            {
+                Console.Error.Write(e);
+                Console.Error.Flush();
+
+                return BadRequest(new { message = e.Message });
+            }
+        }
     }
 }
