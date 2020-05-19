@@ -30,7 +30,7 @@ namespace SteamingService.Services
                 Viewer = viewer
             };
             stream.Viewers.Add(streamViewer);
-            viewer.State = User.UserState.Watching;
+            viewer.ResolveState(User.UserState.Watching);
 
             _context.SaveChanges();
 
@@ -49,9 +49,7 @@ namespace SteamingService.Services
                 Viewer = viewer
             };
             stream.Viewers.Remove(streamViewer);
-            viewer.State = viewer.StreamsWatching.Count > 0
-                ? viewer.State
-                : User.UserState.Active;
+            viewer.ResolveState(User.UserState.Active);
 
             _context.SaveChanges();
 
@@ -60,10 +58,16 @@ namespace SteamingService.Services
 
         public void EndStream(Stream streamInfo)
         {
-            var stream = _context.Streams.Find(streamInfo.Id)
+            var stream = _context.Streams
+                .Include(s => s.Broadcaster.StreamsWatching)
+                .FirstOrDefault(s => s.Id == streamInfo.Id)
                 ?? throw new ArgumentException("Stream doesn't exist");
+
             _context.Streams.Remove(stream);
-            stream.Broadcaster.State = User.UserState.Active;
+            var broadcaster = stream.Broadcaster;
+            broadcaster.State = broadcaster.StreamsWatching.Count > 0
+                ? User.UserState.Watching
+                : User.UserState.Active;
 
             _context.SaveChanges();
         }
@@ -83,7 +87,7 @@ namespace SteamingService.Services
             return StartStream(stream, broadcaster);
         }
 
-            public Stream StartStream(Stream stream, User broadcaster = null)
+        public Stream StartStream(Stream stream, User broadcaster = null)
         {
             if (stream.Broadcaster == null && broadcaster == null)
             {
@@ -91,13 +95,18 @@ namespace SteamingService.Services
             }
 
             stream.Broadcaster = broadcaster ?? stream.Broadcaster;
-            stream.Broadcaster.State = User.UserState.Streaming;
+            stream.Broadcaster.ResolveState(User.UserState.Streaming);
 
             _context.Streams.Add(stream);
 
             _context.SaveChanges();
 
             return stream;
+        }
+
+        private User.UserState ResolveUserState(User.UserState s1, User.UserState s2)
+        {
+            return (User.UserState)Math.Max((byte)s1, (byte)s2);
         }
     }
 }

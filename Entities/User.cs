@@ -1,4 +1,5 @@
 ﻿using SteamingService.Entities;
+using System;
 using System.Collections.Generic;
 
 namespace SteamingService.Models
@@ -16,5 +17,12 @@ namespace SteamingService.Models
         public string StreamerKey { get; set; }
 
         public ICollection<StreamViewer> StreamsWatching { get; set; }
+
+        public UserState ResolveState(UserState state)
+        {
+            _userState = (User.UserState)Math.Max((byte)state, (byte)_userState);
+            
+            return _userState;
+        }
     }
 }

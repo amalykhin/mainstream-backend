@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -11,6 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 using SteamingService.Entities;
 using SteamingService.Models;
 using SteamingService.Services;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 
 namespace SteamingService.Controllers
 {
@@ -23,7 +23,7 @@ namespace SteamingService.Controllers
         private readonly IMapper _mapper;
 
         public APIController(
-            IUserService userService, IStreamService streamService, 
+            IUserService userService, IStreamService streamService,
             IMapper mapper)
         {
             _userService = userService;
@@ -135,12 +135,13 @@ namespace SteamingService.Controllers
             }
         }
 
-        [HttpDelete("streams")]
-        public IActionResult EndStream([FromBody]EndStreamModel streamInfo)
+        [HttpDelete("streams/{broadcasterName}")]
+        public IActionResult EndStream(string broadcasterName)
         {
             try
             {
-                var stream = _mapper.Map<Stream>(streamInfo);
+                var stream = _streamService.GetStreams()
+                    .Single(s => s.Broadcaster.Username == broadcasterName);
                 _streamService.EndStream(stream);
                 return Ok();
             }

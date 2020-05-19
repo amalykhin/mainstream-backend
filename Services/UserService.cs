@@ -1,4 +1,6 @@
-﻿using SteamingService.Helpers;
+﻿using Microsoft.EntityFrameworkCore;
+using SteamingService.Entities;
+using SteamingService.Helpers;
 using SteamingService.Models;
 using System;
 using System.Linq;
@@ -21,7 +23,9 @@ namespace SteamingService.Services
                 throw new ArgumentNullException("Credentials can't be null.");
             }
 
-            var candidate = _context.Users.SingleOrDefault(user => user.Username == username);
+            var candidate = _context.Users
+                .Include(u => u.StreamsWatching)
+                .SingleOrDefault(user => user.Username == username);
             if (candidate == null)
             {
                 return null;
@@ -31,7 +35,7 @@ namespace SteamingService.Services
             {
                 return null;
             }
-            candidate.State = User.UserState.Active;
+            candidate.ResolveState(User.UserState.Active);
             _context.SaveChanges();
 
             return candidate;
