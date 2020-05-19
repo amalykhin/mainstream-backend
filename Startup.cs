@@ -34,10 +34,12 @@ namespace SteamingService
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie();
-            services.AddCors(c => c.AddPolicy("AllowOrigin", opt => { 
-                opt.AllowAnyOrigin();
+            services.AddCors(c => c.AddPolicy("AllowOrigin", opt => {
+                opt.WithOrigins("http://localhost:4200");
                 opt.AllowAnyHeader();
-                }));
+                opt.AllowAnyMethod();
+                opt.AllowCredentials();
+            }));
 
             services.AddDbContext<DataContext>(options => options.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=mainstreamDb;Trusted_Connection=True;"));
 
