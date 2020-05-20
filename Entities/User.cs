@@ -20,9 +20,9 @@ namespace SteamingService.Models
 
         public UserState ResolveState(UserState state)
         {
-            _userState = (User.UserState)Math.Max((byte)state, (byte)_userState);
+            State = (User.UserState)Math.Max((byte)state, (byte)State);
             
-            return _userState;
+            return State;
         }
     }
 }

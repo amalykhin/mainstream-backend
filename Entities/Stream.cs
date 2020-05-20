@@ -12,6 +12,8 @@ namespace SteamingService.Entities
         public int BroadcasterId { get; set; }
         public User Broadcaster { get; set; }
 
+        public string BroadcastUri { get; set; }
+
         public ICollection<StreamViewer> Viewers { get; set; }
     }
 }

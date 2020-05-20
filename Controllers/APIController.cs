@@ -73,6 +73,7 @@ namespace SteamingService.Controllers
             }
             catch (Exception e)
             {
+                PrintException(e);
                 return BadRequest(new { message = e.Message });
             }
         }
@@ -89,6 +90,7 @@ namespace SteamingService.Controllers
             }
             catch (Exception e)
             {
+                PrintException(e);
                 return BadRequest(new { message = e.Message });
             }
         }
@@ -105,6 +107,7 @@ namespace SteamingService.Controllers
             }
             catch (Exception e)
             {
+                PrintException(e);
                 return BadRequest(new { message = e.Message });
             }
         }
@@ -124,13 +127,15 @@ namespace SteamingService.Controllers
                 var stream = new Stream
                 {
                     Title = streamInfo.Title,
-                    Description = streamInfo.Description
+                    Description = streamInfo.Description,
+                    BroadcastUri = streamInfo.StreamUri
                 };
                 stream = _streamService.StartStream(stream, streamInfo.Broadcaster);
                 return Ok(stream);
             }
             catch (Exception e)
             {
+                PrintException(e);
                 return BadRequest(new { message = e.Message });
             }
         }
@@ -147,6 +152,7 @@ namespace SteamingService.Controllers
             }
             catch (Exception e)
             {
+                PrintException(e);
                 return BadRequest(new { message = e.Message });
             }
         }
@@ -163,11 +169,41 @@ namespace SteamingService.Controllers
             }
             catch (Exception e)
             {
-                Console.Error.Write(e);
-                Console.Error.Flush();
-
+                PrintException(e);
                 return BadRequest(new { message = e.Message });
             }
+        }
+
+        [HttpGet("user")]
+        public IActionResult GetCurrentUser()
+        {
+            try
+            {
+                var username = this.User
+                    .FindFirst(ClaimTypes.Name)
+                    .Value;
+                var user = _userService.GetUser(username);
+
+                return Ok(new
+                {
+                    id = user.Id,
+                    username = user.Username,
+                    email = user.Email,
+                    state = user.State,
+                    streamerKey = user.StreamerKey
+                });
+            }
+            catch (Exception e)
+            {
+                PrintException(e);
+                return BadRequest(new { message = e.Message });
+            }
+        }
+
+        private void PrintException(Exception e)
+        {
+            Console.Error.Write(e);
+            Console.Error.Flush();
         }
     }
 }

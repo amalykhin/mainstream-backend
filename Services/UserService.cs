@@ -41,10 +41,8 @@ namespace SteamingService.Services
             return candidate;
         }
 
-        public User GetUser(string username)
-        {
-            throw new NotImplementedException();
-        }
+        public User GetUser(string username) =>
+            _context.Users.SingleOrDefault(u => u.Username == username);
 
         public User Register(User user, string password)
         {
