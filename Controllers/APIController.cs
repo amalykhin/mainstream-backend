@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace SteamingService.Controllers
 {
@@ -59,6 +60,14 @@ namespace SteamingService.Controllers
                 state = user.State,
                 streamerKey = user.StreamerKey
             });
+        }
+
+        [HttpGet("logout")]
+        public async Task<IActionResult> LogOut()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            return Ok();
         }
 
         [AllowAnonymous]
@@ -181,8 +190,14 @@ namespace SteamingService.Controllers
             {
                 var username = this.User
                     .FindFirst(ClaimTypes.Name)
-                    .Value;
+                    ?.Value;
+
                 var user = _userService.GetUser(username);
+
+                if (user == null)
+                {
+                    return Ok();
+                }
 
                 return Ok(new
                 {
