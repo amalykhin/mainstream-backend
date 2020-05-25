@@ -166,6 +166,7 @@ namespace SteamingService.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("streams/{broadcasterName}")]
         public IActionResult GetStream(string broadcasterName)
         {

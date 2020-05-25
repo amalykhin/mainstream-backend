@@ -10,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using SteamingService.Helpers;
 using SteamingService.Services;
 using AutoMapper;
+using SteamingService.Hubs;
 
 namespace SteamingService
 {
@@ -31,6 +32,8 @@ namespace SteamingService
             //{
             //    configuration.RootPath = "ClientApp/dist";
             //});
+
+            services.AddSignalR();
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie();
@@ -82,6 +85,7 @@ namespace SteamingService
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
+                endpoints.MapHub<ChatHub>("chat");
             });
 
             //app.UseSpa(spa =>
